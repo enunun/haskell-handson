@@ -1,7 +1,8 @@
 # haskell-handson
 
-Haskellを初めて学ぶ人(他の言語でのプログラミング経験はある)向けのハンズオン教材．
-Iterationごとに演習用(exercise)と解答例(solution)のcabalパッケージを置き，1つのcabalプロジェクトにまとめる．
+Hands-on material for people learning Haskell for the first time (who already have programming experience in other languages).
+Each Iteration has an exercise package and a solution package (cabal packages), all combined into a single cabal project.
+The learner-facing material is written in Japanese.
 
 # RTK (Rust Token Killer)
 
@@ -9,38 +10,38 @@ Prefix every shell command with `rtk`, including each command in a `&&` chain �
 
 ## Working conventions
 
-- Iterationを作る・直すときは，`build-iteration`スキル(`.claude/skills/build-iteration/SKILL.md`)の手順に従う．各Iterationの内容は`docs/ROADMAP.md`で決める．
-- 読者はHaskellを知らない前提で書く．新しい文法・概念は，初めて使うIterationの資料(`docs/haskell/iteration-N.md`)で説明してから使う．
-- 同じIterationのexerciseとsolutionは，同じコミットでそろえて変更する．
-- solutionのテストはすべて通す．exerciseは，学習者が書き足す前の状態でもビルドできるようにする．
-- Iteration N(N ≥ 1)のexerciseのコード・テスト・設計書(`design/`)は，Iteration N-1のsolutionと同じにする．新しいモジュール，テスト，`.cabal`への追記，設計書の更新は学習者の作業として残す．
-- 設計書は，C4モデルの4階層(`design/01-context.md`〜`04-code.md`)のmermaidの図で書く(`docs/design.md`)．Componentの図の矢印は実装の`import`と，Codeの図の名前は実装の名前と一致させる．
-- `cabal.project`の`packages`には，solutionのパッケージだけを列挙する(HLSはここに列挙したパッケージしか解析しない)．exerciseのパッケージは，学習者が各Iterationの最初に自分で追記する．
-- GHC・cabal・HLSの版は`mise.toml`の`[vars]`で決める．変えるときは，HLSがそのGHCに対応していることを確かめる．
-- `git commit`はlefthookのフックを実行する．失敗したら指摘を直す．`--no-verify`は使わない．
-- 変更後は`mise run check`を実行する．exerciseを含むすべてのパッケージを，一時的なプロジェクトファイル(`cabal.project.all`)でビルドしてテストする．
-- 日本語を含むHaskellのコードは，ロケールがUTF-8でないとGHCが扱えない．開発用コンテナは`LANG=C.UTF-8`を設定している．
+- When creating or fixing an Iteration, follow the `build-iteration` skill (`.claude/skills/build-iteration/SKILL.md`). The content of each Iteration is defined in `docs/ROADMAP.md`.
+- Write for readers who do not know Haskell. Explain new syntax and concepts in the notes of the Iteration that first uses them (`docs/haskell/iteration-N.md`) before using them.
+- Change the exercise and solution of the same Iteration together in the same commit.
+- All solution tests must pass. Exercises must build even before the learner adds anything.
+- The code, tests and design documents (`design/`) of Iteration N's (N ≥ 1) exercise are identical to Iteration N-1's solution. New modules, tests, additions to `.cabal` and design-document updates are left as the learner's work.
+- Design documents are mermaid diagrams at the four levels of the C4 model (`design/01-context.md` to `04-code.md`; see `docs/design.md`). Arrows in the Component diagram must match the implementation's `import`s, and names in the Code diagram must match the implementation's names.
+- The `packages` of `cabal.project` lists only solution packages (HLS analyzes only the packages listed there). Learners add the exercise package themselves at the start of each Iteration.
+- The versions of GHC, cabal and HLS are set in `[vars]` of `mise.toml`. When changing them, make sure HLS supports that GHC.
+- `git commit` runs lefthook hooks. If they fail, fix the reported issues. Do not use `--no-verify`.
+- After making changes, run `mise run check`. It builds and tests every package, including exercises, using a temporary project file (`cabal.project.all`).
+- GHC cannot handle Haskell code containing Japanese unless the locale is UTF-8. The dev container sets `LANG=C.UTF-8`.
 
 ## Code map
 
 ```
 iterations/iteration-N/
-  exercise/    演習用パッケージ．学習者がここに実装とテストを書き足す．
-               docs/iteration-N.md(演習の手順)，TESTLIST.md(テストリストのひな形)，design/(設計書)を含む．
-  solution/    解答例パッケージ．exerciseを完成させた状態．
-               docs/iteration-N.md(各手順の解説)，TESTLIST.md・design/(模範解答)を含む．
+  exercise/    Exercise package. The learner adds implementation and tests here.
+               Contains docs/iteration-N.md (exercise steps), TESTLIST.md (test-list template) and design/ (design documents).
+  solution/    Solution package: the exercise in its completed state.
+               Contains docs/iteration-N.md (walkthrough of each step), TESTLIST.md and design/ (model answers).
 docs/
-  ROADMAP.md   各Iterationの要求・モジュール・学ぶこと．Iterationの内容はここで決める．
-  tdd.md       テスト駆動開発とテストリストの書き方．
-  design.md    設計書(C4モデル・mermaid)の書き方．
-  cabal.md     cabalの使い方．
-  haskell/     Iterationごとの，Haskellの文法・概念の資料．
-cabal.project  solutionのパッケージをまとめるcabalプロジェクト．
-.hlint.yaml    hlintの設定．
-tools/mermaid/ Markdownの中のmermaidの図の構文を検査するスクリプト(Node)．
-mise.toml      ツールの版とタスク(toolchain/install/fmt/lint/test/test-all/check/setup)．
-.devcontainer/ 開発用コンテナの定義．GHC・cabal・HLSはイメージのビルド時にghcupで入る．
-.claude/skills/build-iteration/  Iterationを作る手順のスキル．
+  ROADMAP.md   Requirements, modules and learning topics of each Iteration. The content of Iterations is decided here.
+  tdd.md       Test-driven development and how to write test lists.
+  design.md    How to write design documents (C4 model, mermaid).
+  cabal.md     How to use cabal.
+  haskell/     Per-Iteration notes on Haskell syntax and concepts.
+cabal.project  cabal project bundling the solution packages.
+.hlint.yaml    hlint configuration.
+tools/mermaid/ Script (Node) that checks the syntax of mermaid diagrams in Markdown.
+mise.toml      Tool versions and tasks (toolchain/install/fmt/lint/test/test-all/check/setup).
+.devcontainer/ Dev container definition. GHC, cabal and HLS are installed with ghcup when the image is built.
+.claude/skills/build-iteration/  Skill describing how to build an Iteration.
 ```
 
 # Artifact Cleanup

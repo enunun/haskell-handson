@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# 解答例の設計書のComponentの図(design/03-component.md)の矢印と，実装のimportが一致するかを確かめる．
-# 使い方：.claude/skills/build-iteration/check-component.sh <パッケージのディレクトリ>…
-# 一致しない矢印を「< importにだけある」「> 図にだけある」の形で表示し，1つでもあれば終了コード1で終わる．
-# 外部のもの(Component_Ext・ContainerDb_Ext)への矢印は比べない．
+# Checks that the arrows in the solution's Component diagram (design/03-component.md) match the implementation's imports.
+# Usage: .claude/skills/build-iteration/check-component.sh <package directory>…
+# Prints mismatched arrows as "< only in imports" / "> only in the diagram", and exits with status 1 if there are any.
+# Arrows to external elements (Component_Ext, ContainerDb_Ext) are not compared.
 set -u
 status=0
 for dir in "$@"; do
