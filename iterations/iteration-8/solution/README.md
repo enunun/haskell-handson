@@ -42,6 +42,7 @@ test/common/Kakeibo/Generators.hs    性質のテストで使うジェネレー�
 test/unit/Kakeibo/*Spec.hs           各モジュールの単体テスト(例と性質)
 test/integration/Kakeibo/AppSpec.hs  runの結合テスト(例と性質)
 TESTLIST.md                          テストリストの模範解答
+design/                              設計書の模範解答(C4モデルの4つの階層)
 docs/iteration-8.md                  演習の各手順の解説
 ```
 
