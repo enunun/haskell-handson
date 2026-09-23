@@ -44,9 +44,19 @@ run = [
 ]
 
 [tasks.test]
-description = "すべてのパッケージのテストを実行する"
+description = "cabal.projectに登録したパッケージのテストを実行する"
 depends = ["install"]
 run = "cabal test all"
+
+# 演習用パッケージは学習者がcabal.projectに登録する．保守用には，
+# すべてのパッケージを並べたプロジェクトファイルを作ってテストする．
+[tasks.test-all]
+description = "演習用を含むすべてのパッケージをビルドし，テストを実行する(教材の保守用)"
+depends = ["install"]
+run = [
+	"{ echo 'packages:'; for dir in iterations/*/*/; do echo \"  $dir\"; done; } > cabal.project.all",
+	"cabal test all --project-file=cabal.project.all --builddir=dist-newstyle/all",
+]
 
 [tasks.hooks]
 description = "Gitのフック(コミット時の検査)を設定する"
@@ -57,5 +67,5 @@ description = "開発環境を整える(GHC・cabal・HLS，パッケージ一�
 depends = ["install", "hooks"]
 
 [tasks.check]
-description = "整形の検査，リント，テストをまとめて実行する"
-depends = ["lint", "test"]
+description = "整形の検査，リント，すべてのパッケージのテストをまとめて実行する"
+depends = ["lint", "test-all"]

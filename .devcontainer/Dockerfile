@@ -22,6 +22,10 @@ RUN apt-get update \
 ENV PATH=/root/.ghcup/bin:${PATH} \
     GHCUP_SKIP_UPDATE_CHECK=1
 
+# GHCがソースコード・コマンドライン引数・入出力の日本語を扱えるように，
+# ロケールをUTF-8にする．
+ENV LANG=C.UTF-8
+
 # ツール(rtk，lefthook，ghcupなど)はmise.tomlのとおりにイメージへ入れ，
 # ghcupでGHC・cabal・HLSを入れる．ghcupのキャッシュ，GHCの版と合わないHLS，
 # プロファイリング用ライブラリは使わないので消し，イメージを小さくする．

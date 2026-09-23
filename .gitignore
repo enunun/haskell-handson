@@ -78,6 +78,10 @@ tmp/
 dist-newstyle/
 cabal.project.local
 cabal.project.local~
+cabal.project.all
+
+# kakeiboのデータファイル(Iteration 6以降，KAKEIBO_FILEがなければ実行した場所に作られる)
+kakeibo.tsv
 .ghc.environment.*
 *.hi
 *.o

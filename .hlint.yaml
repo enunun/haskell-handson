@@ -1,0 +1,8 @@
+# 引数を明示した定義(`total amounts = sum amounts`)は，関数の形が読み取りやすい．
+# 初めてHaskellを書く人が読むコードなので，引数を省く書き換えは提案させない．
+- ignore: {name: Eta reduce}
+
+# 教材では，リストを処理する関数を再帰で書き(Iteration 1)，
+# それをfoldrで書き直す(Iteration 3)．その途中の形を残せるようにする．
+- ignore: {name: Use foldr}
+- ignore: {name: Use sum}
