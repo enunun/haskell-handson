@@ -5,6 +5,8 @@ lefthook = "2"
 ghcup = "0.2.6.2"
 hlint = "3.10"
 ormolu = "0.8.1.1"
+# 設計書のmermaidの図を検査する(tools/mermaid)ために使う．
+node = "22"
 # 版を固定する場合はここで`mise lock`を実行し，生成されたmise.lockもコミットする．
 
 [settings]
@@ -26,9 +28,9 @@ run = [
 ]
 
 [tasks.install]
-description = "Hackageのパッケージ一覧を取得する(依存パッケージは初回のビルド時に入る)"
+description = "Hackageのパッケージ一覧を取得し，mermaidの検査に使うパッケージを入れる(Haskellの依存パッケージは初回のビルド時に入る)"
 depends = ["toolchain"]
-run = "cabal update"
+run = ["cabal update", "npm ci --prefix tools/mermaid --silent"]
 
 [tasks.fmt]
 description = "Haskellのコードを整形する"
@@ -41,6 +43,7 @@ depends = ["install"]
 run = [
 	"git ls-files -z --cached --others --exclude-standard '*.hs' | xargs -0 -r ormolu --mode check",
 	"git ls-files -z --cached --others --exclude-standard '*.hs' | xargs -0 -r hlint",
+	"git ls-files -z --cached --others --exclude-standard '*.md' | xargs -0 -r node tools/mermaid/check.mjs",
 ]
 
 [tasks.test]

@@ -6,7 +6,7 @@
 	"shutdownAction": "stopCompose",
 	"customizations": {
 		"vscode": {
-			"extensions": ["haskell.haskell", "anthropic.claude-code", "growthjack.claude-code-usage"],
+			"extensions": ["haskell.haskell", "bierner.markdown-mermaid", "anthropic.claude-code", "growthjack.claude-code-usage"],
 			"settings": {
 				"haskell.manageHLS": "PATH",
 				"haskell.formattingProvider": "ormolu",

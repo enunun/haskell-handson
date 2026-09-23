@@ -66,6 +66,9 @@ desktop.ini
 !.vscode/launch.json
 !.vscode/tasks.json
 
+# Node(tools/mermaidのパッケージ)
+node_modules/
+
 # Logs and temporary files
 *.log
 *.tmp

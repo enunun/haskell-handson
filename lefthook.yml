@@ -14,3 +14,7 @@ pre-commit:
       glob: '*.hs'
       run: hlint {staged_files}
       fail_text: hlintの指摘を直してください．
+    mermaid:
+      glob: '*.md'
+      run: node tools/mermaid/check.mjs {staged_files}
+      fail_text: 読めないmermaidの図があります．表示された図を直してください．
