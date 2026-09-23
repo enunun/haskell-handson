@@ -12,6 +12,9 @@
       }
     ]
   },
+  "enabledPlugins": {
+    "system-development-skills@system-development-skills": true
+  },
   "extraKnownMarketplaces": {
     "system-development-skills": {
       "source": {
@@ -19,8 +22,5 @@
         "repo": "enunun/system-development-skills"
       }
     }
-  },
-  "enabledPlugins": {
-    "system-development-skills@system-development-skills": true
   }
 }

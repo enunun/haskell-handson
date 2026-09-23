@@ -1,12 +1,22 @@
 {
-	"name": "PROJECT_NAME-dev",
+	"name": "haskell-handson-dev",
 	"dockerComposeFile": "./compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspaces",
 	"shutdownAction": "stopCompose",
 	"customizations": {
 		"vscode": {
-			"extensions": ["anthropic.claude-code", "growthjack.claude-code-usage"]
+			"extensions": ["haskell.haskell", "anthropic.claude-code", "growthjack.claude-code-usage"],
+			"settings": {
+				"haskell.manageHLS": "PATH",
+				"haskell.formattingProvider": "ormolu",
+				"[haskell]": {
+					"editor.formatOnSave": true
+				},
+				"files.watcherExclude": {
+					"**/dist-newstyle/**": true
+				}
+			}
 		}
 	},
 	"postCreateCommand": "mise run setup",

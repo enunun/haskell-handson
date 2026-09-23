@@ -7,8 +7,10 @@ pre-commit:
     - rebase
   commands:
     format:
-      glob:
-        - '*'
-      run: echo 'TODO: run your formatter --check against {staged_files}'
+      glob: '*.hs'
+      run: ormolu --mode check {staged_files}
       fail_text: 整形が必要です．`mise run fmt`を実行してください．
-    # 必要に応じて，リント・型検査などのcommandsを追加する．
+    hlint:
+      glob: '*.hs'
+      run: hlint {staged_files}
+      fail_text: hlintの指摘を直してください．

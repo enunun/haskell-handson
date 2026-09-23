@@ -1,30 +1,52 @@
 [tools]
 rtk = "0.45.0"
 lefthook = "2"
-# ここにプロジェクトが使う言語・ツールを追加する(例: node = "24"，rust = "1.98.1")．
+# GHC・cabal・HLSは，miseで入れたghcupがインストールする(tasks.toolchain)．
+ghcup = "0.2.6.2"
+hlint = "3.10"
+ormolu = "0.8.1.1"
 # 版を固定する場合はここで`mise lock`を実行し，生成されたmise.lockもコミットする．
 
 [settings]
 lockfile = true
 
+# ghcupで入れるツールの版．いずれもghcupの"recommended"に合わせる．
+# HLSは，ここで選んだGHCに対応するビルドを含む版を選ぶ．
+[vars]
+ghc = "9.10.3"
+cabal = "3.16.1.0"
+hls = "2.14.0.0"
+
+[tasks.toolchain]
+description = "ghcupでGHC・cabal・HLSをインストールする(導入済みなら何もしない)"
+run = [
+	"ghcup install ghc {{vars.ghc}} --set",
+	"ghcup install cabal {{vars.cabal}} --set",
+	"ghcup install hls {{vars.hls}} --set",
+]
+
 [tasks.install]
-description = "依存パッケージをインストールする"
-run = "echo 'TODO: add your install command (e.g. pnpm install --frozen-lockfile)'"
+description = "Hackageのパッケージ一覧を取得する(依存パッケージは初回のビルド時に入る)"
+depends = ["toolchain"]
+run = "cabal update"
 
 [tasks.fmt]
-description = "コードと文書を整形する"
+description = "Haskellのコードを整形する"
 depends = ["install"]
-run = "echo 'TODO: add your formatter'"
+run = "git ls-files -z --cached --others --exclude-standard '*.hs' | xargs -0 -r ormolu --mode inplace"
 
 [tasks.lint]
 description = "すべてのリントを実行する"
 depends = ["install"]
-run = "echo 'TODO: add your linters'"
+run = [
+	"git ls-files -z --cached --others --exclude-standard '*.hs' | xargs -0 -r ormolu --mode check",
+	"git ls-files -z --cached --others --exclude-standard '*.hs' | xargs -0 -r hlint",
+]
 
 [tasks.test]
-description = "単体テストを実行する"
+description = "すべてのパッケージのテストを実行する"
 depends = ["install"]
-run = "echo 'TODO: add your test command'"
+run = "cabal test all"
 
 [tasks.hooks]
 description = "Gitのフック(コミット時の検査)を設定する"

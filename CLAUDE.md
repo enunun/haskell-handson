@@ -1,6 +1,7 @@
-# PROJECT_NAME
+# haskell-handson
 
-TODO: 1-2文でプロジェクトの概要を書く．
+Haskellを初めて学ぶ人(他の言語でのプログラミング経験はある)向けのハンズオン教材．
+Iterationごとに演習用(exercise)と解答例(solution)のcabalパッケージを置き，1つのcabalプロジェクトにまとめる．
 
 # RTK (Rust Token Killer)
 
@@ -8,14 +9,25 @@ Prefix every shell command with `rtk`, including each command in a `&&` chain �
 
 ## Working conventions
 
-TODO: このプロジェクトの開発方針(ブランチ運用，コミットの粒度，レビューの要否など)を書く．
-
+- 読者はHaskellを知らない前提で書く．新しい文法・概念は，初めて使うIterationの資料で説明してから使う．
+- 同じIterationのexerciseとsolutionは，同じコミットでそろえて変更する．
+- solutionのテストはすべて通す．exerciseは，学習者が書き足す前の状態でもビルドできるようにする．
+- パッケージを追加・削除したら，`cabal.project`の`packages`も更新する(HLSはここに列挙したパッケージしか解析しない)．
+- GHC・cabal・HLSの版は`mise.toml`の`[vars]`で決める．変えるときは，HLSがそのGHCに対応していることを確かめる．
 - `git commit`はlefthookのフックを実行する．失敗したら指摘を直す．`--no-verify`は使わない．
 - 変更後は`mise run check`を実行する．
 
 ## Code map
 
-TODO: 主要なディレクトリ構成とその役割を書く．
+```
+iterations/iteration-N/
+  exercise/    演習用パッケージ．学習者がここに実装とテストを書き足す．
+  solution/    解答例パッケージ．exerciseを完成させた状態．
+docs/          Iterationをまたいで参照する資料(Haskellの文法・概念のリファレンスなど)．
+cabal.project  全パッケージをまとめるcabalプロジェクト．
+mise.toml      ツールの版とタスク(toolchain/install/fmt/lint/test/check/setup)．
+.devcontainer/ 開発用コンテナの定義．GHC・cabal・HLSはイメージのビルド時にghcupで入る．
+```
 
 # Artifact Cleanup
 

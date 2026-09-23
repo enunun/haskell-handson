@@ -3,8 +3,16 @@ services:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
-    container_name: PROJECT_NAME-container
+    container_name: haskell-handson-container
     volumes:
       - ..:/workspaces:cached
+      # cabalのパッケージ一覧とビルド済みの依存パッケージ．
+      # コンテナを作り直しても，依存パッケージのビルドをやり直さずに済む．
+      - cabal-cache:/root/.cache/cabal
+      - cabal-state:/root/.local/state/cabal
     working_dir: /workspaces
     command: ["sleep", "infinity"]
+
+volumes:
+  cabal-cache:
+  cabal-state:

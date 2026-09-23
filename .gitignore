@@ -71,3 +71,16 @@ desktop.ini
 *.tmp
 *.bak
 tmp/
+
+# ---------------------------------------------------------------
+# Haskell (cabal / GHC / HLS)
+# ---------------------------------------------------------------
+dist-newstyle/
+cabal.project.local
+cabal.project.local~
+.ghc.environment.*
+*.hi
+*.o
+*.hie
+*.dyn_hi
+*.dyn_o
