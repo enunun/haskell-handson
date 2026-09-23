@@ -53,9 +53,9 @@ description = "Gitのフック(コミット時の検査)を設定する"
 run = "lefthook install"
 
 [tasks.setup]
-description = "開発環境を整える(依存パッケージ，Gitのフックなど)"
+description = "開発環境を整える(GHC・cabal・HLS，パッケージ一覧，Gitのフック)"
 depends = ["install", "hooks"]
 
 [tasks.check]
-description = "整形の検査，リント，単体テストなどをまとめて実行する(CIと同じ)"
+description = "整形の検査，リント，テストをまとめて実行する"
 depends = ["lint", "test"]

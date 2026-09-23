@@ -1,5 +1,5 @@
 # コミット時に，ステージしたファイルを検査する．
-# CIは，同じ設定のツールをリポジトリ全体に対して実行する(mise run check)．
+# リポジトリ全体に同じ検査をかけるには，`mise run check`を実行する．
 pre-commit:
   parallel: true
   skip:
