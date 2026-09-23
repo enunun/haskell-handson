@@ -1,0 +1,58 @@
+cabal-version:   3.0
+name:            kakeibo-iteration5
+version:         0.1.0.0
+synopsis:        家計簿プログラムkakeibo(Iteration 5・演習用)
+license:         MIT
+build-type:      Simple
+
+library
+    hs-source-dirs:   src
+    exposed-modules:
+        Kakeibo.App
+        Kakeibo.Entry
+        Kakeibo.Money
+        Kakeibo.Summary
+    build-depends:    base >=4.18 && <5
+    default-language: GHC2021
+    ghc-options:      -Wall
+
+executable kakeibo
+    hs-source-dirs:   app
+    main-is:          Main.hs
+    build-depends:
+        base >=4.18 && <5,
+        kakeibo-iteration5
+    default-language: GHC2021
+    ghc-options:      -Wall
+
+-- 単体テスト：1つのモジュールの関数を単独で確かめる．
+test-suite unit
+    type:               exitcode-stdio-1.0
+    hs-source-dirs:     test/unit
+    main-is:            Spec.hs
+    other-modules:
+        Kakeibo.EntrySpec
+        Kakeibo.MoneySpec
+        Kakeibo.SummarySpec
+    build-depends:
+        base >=4.18 && <5,
+        hspec,
+        kakeibo-iteration5
+    build-tool-depends: hspec-discover:hspec-discover
+    default-language:   GHC2021
+    ghc-options:        -Wall
+
+-- 結合テスト：プログラムの入口(Kakeibo.App.run)から，
+-- 複数のモジュールを組み合わせた振る舞いを確かめる．
+test-suite integration
+    type:               exitcode-stdio-1.0
+    hs-source-dirs:     test/integration
+    main-is:            Spec.hs
+    other-modules:      Kakeibo.AppSpec
+    build-depends:
+        base >=4.18 && <5,
+        hspec,
+        kakeibo-iteration5
+    build-tool-depends: hspec-discover:hspec-discover
+    default-language:   GHC2021
+    ghc-options:        -Wall
