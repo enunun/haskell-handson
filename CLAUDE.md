@@ -9,24 +9,35 @@ Prefix every shell command with `rtk`, including each command in a `&&` chain �
 
 ## Working conventions
 
-- 読者はHaskellを知らない前提で書く．新しい文法・概念は，初めて使うIterationの資料で説明してから使う．
+- Iterationを作る・直すときは，`build-iteration`スキル(`.claude/skills/build-iteration/SKILL.md`)の手順に従う．各Iterationの内容は`docs/ROADMAP.md`で決める．
+- 読者はHaskellを知らない前提で書く．新しい文法・概念は，初めて使うIterationの資料(`docs/haskell/iteration-N.md`)で説明してから使う．
 - 同じIterationのexerciseとsolutionは，同じコミットでそろえて変更する．
 - solutionのテストはすべて通す．exerciseは，学習者が書き足す前の状態でもビルドできるようにする．
-- パッケージを追加・削除したら，`cabal.project`の`packages`も更新する(HLSはここに列挙したパッケージしか解析しない)．
+- Iteration N(N ≥ 1)のexerciseのコードとテストは，Iteration N-1のsolutionと同じにする．新しいモジュール，テスト，`.cabal`への追記は学習者の作業として残す．
+- `cabal.project`の`packages`には，solutionのパッケージだけを列挙する(HLSはここに列挙したパッケージしか解析しない)．exerciseのパッケージは，学習者が各Iterationの最初に自分で追記する．
 - GHC・cabal・HLSの版は`mise.toml`の`[vars]`で決める．変えるときは，HLSがそのGHCに対応していることを確かめる．
 - `git commit`はlefthookのフックを実行する．失敗したら指摘を直す．`--no-verify`は使わない．
-- 変更後は`mise run check`を実行する．
+- 変更後は`mise run check`を実行する．exerciseを含むすべてのパッケージを，一時的なプロジェクトファイル(`cabal.project.all`)でビルドしてテストする．
+- 日本語を含むHaskellのコードは，ロケールがUTF-8でないとGHCが扱えない．開発用コンテナは`LANG=C.UTF-8`を設定している．
 
 ## Code map
 
 ```
 iterations/iteration-N/
   exercise/    演習用パッケージ．学習者がここに実装とテストを書き足す．
+               docs/iteration-N.md(演習の手順)，TESTLIST.md(テストリストのひな形)を含む．
   solution/    解答例パッケージ．exerciseを完成させた状態．
-docs/          Iterationをまたいで参照する資料(Haskellの文法・概念のリファレンスなど)．
-cabal.project  全パッケージをまとめるcabalプロジェクト．
-mise.toml      ツールの版とタスク(toolchain/install/fmt/lint/test/check/setup)．
+               docs/iteration-N.md(各手順の解説)，TESTLIST.md(模範解答)を含む．
+docs/
+  ROADMAP.md   各Iterationの要求・モジュール・学ぶこと．Iterationの内容はここで決める．
+  tdd.md       テスト駆動開発とテストリストの書き方．
+  cabal.md     cabalの使い方．
+  haskell/     Iterationごとの，Haskellの文法・概念の資料．
+cabal.project  solutionのパッケージをまとめるcabalプロジェクト．
+.hlint.yaml    hlintの設定．
+mise.toml      ツールの版とタスク(toolchain/install/fmt/lint/test/test-all/check/setup)．
 .devcontainer/ 開発用コンテナの定義．GHC・cabal・HLSはイメージのビルド時にghcupで入る．
+.claude/skills/build-iteration/  Iterationを作る手順のスキル．
 ```
 
 # Artifact Cleanup
