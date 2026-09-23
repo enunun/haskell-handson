@@ -1,0 +1,21 @@
+# Component：モジュール
+
+実行ファイル`kakeibo`を構成するモジュールと，その依存関係を示す．
+
+```mermaid
+C4Component
+  title kakeibo実行ファイルのコンポーネント
+  Container_Boundary(cli, "kakeibo実行ファイル") {
+    Boundary(io, "IOを行う部分") {
+      Component(main, "Main", "app/Main.hs", "コマンドライン引数を読み，runが返した行を表示する")
+    }
+    Boundary(pure, "純粋な部分") {
+      Component(app, "Kakeibo.App", "src/Kakeibo/App.hs", "コマンドライン引数から，表示する行を作る")
+      Component(money, "Kakeibo.Money", "src/Kakeibo/Money.hs", "金額の合計を求め，表示用の文字列にする")
+    }
+  }
+  Rel(main, app, "run")
+  Rel(app, money, "total, formatYen")
+```
+
+- `IO`を行うのは`Main`だけである．計算はすべて純粋な関数にし，単体テストと結合テストから直接呼べるようにする．
