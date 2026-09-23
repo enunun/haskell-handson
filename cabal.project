@@ -1,0 +1,4 @@
+-- 解答例のパッケージ．
+-- 演習用のパッケージは，各Iterationの最初に自分でここへ追記する．
+packages:
+  iterations/iteration-0/solution
