@@ -26,6 +26,7 @@ test/unit/Kakeibo/MoneySpec.hs       Kakeibo.Moneyの単体テスト
 test/unit/Kakeibo/EntrySpec.hs       Kakeibo.Entryの単体テスト
 test/integration/Kakeibo/AppSpec.hs  runの結合テスト
 TESTLIST.md                          テストリストの模範解答
+design/                              設計書の模範解答(C4モデルの4つの階層)
 docs/iteration-2.md                  演習の各手順の解説
 ```
 

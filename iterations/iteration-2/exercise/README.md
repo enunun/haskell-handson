@@ -34,6 +34,7 @@ src/Kakeibo/App.hs                   引数から表示する行を作る(run)
 test/unit/Kakeibo/MoneySpec.hs       Kakeibo.Moneyの単体テスト
 test/integration/Kakeibo/AppSpec.hs  runの結合テスト
 TESTLIST.md                          テストリスト(自分で書く)
+design/                              設計書(C4モデルの4つの階層．自分で更新する)
 docs/iteration-2.md                  演習の手順
 ```
 
@@ -43,4 +44,5 @@ docs/iteration-2.md                  演習の手順
 
 - [Iteration 2で使う文法・概念](../../../docs/haskell/iteration-2.md)
 - [テスト駆動開発とテストリスト](../../../docs/tdd.md)
+- [設計書の書き方](../../../docs/design.md)
 - [cabal](../../../docs/cabal.md)
