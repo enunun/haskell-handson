@@ -38,6 +38,7 @@ test/unit/Kakeibo/EntrySpec.hs       Kakeibo.Entryの単体テスト
 test/unit/Kakeibo/SummarySpec.hs     Kakeibo.Summaryの単体テスト
 test/integration/Kakeibo/AppSpec.hs  runの結合テスト
 TESTLIST.md                          テストリスト(自分で書く)
+design/                              設計書(C4モデルの4つの階層．自分で更新する)
 docs/iteration-4.md                  演習の手順
 ```
 
@@ -45,4 +46,5 @@ docs/iteration-4.md                  演習の手順
 
 - [Iteration 4で使う文法・概念](../../../docs/haskell/iteration-4.md)
 - [テスト駆動開発とテストリスト](../../../docs/tdd.md)
+- [設計書の書き方](../../../docs/design.md)
 - [cabal](../../../docs/cabal.md)
