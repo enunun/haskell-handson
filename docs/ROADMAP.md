@@ -26,14 +26,18 @@ $ kakeibo summary
 
 1. 演習用パッケージ(`iterations/iteration-N/exercise`)を`cabal.project`に登録し，ビルドする．
 2. 資料(`docs/iteration-N.md`)の「要求」を読み，単体テストと結合テストのテストリストを`TESTLIST.md`に書く．
-3. テストリストから1つずつ選び，テストを書いて失敗させ(Red)，実装して通す(Green)．
-4. 必要ならテストが通ったまま整理する(Refactor)．
-5. テストリストが空になったら，解答例(`iterations/iteration-N/solution`)と見比べる．
+3. テストリストの振る舞いを実現する型・関数・モジュールを決め，`design/`の設計書を更新する．
+4. テストリストから1つずつ選び，テストを書いて失敗させ(Red)，実装して通す(Green)．必要ならテストが通ったまま整理する(Refactor)．
+5. 設計書と実装を見比べ，ずれていれば設計書を直す．
+6. 解答例(`iterations/iteration-N/solution`)のテストリスト・設計書・コードと見比べる．
 
 仕様書は用意しない．要求を読んで自分で書いたテストリストと，そこから育てたテストが，そのIterationの仕様になる．
-テスト駆動開発(TDD)の進め方と，テストリストの書き方は[tdd.md](tdd.md)で説明する．
+テストリストは「何ができればよいか」を，設計書は「それをどんな型・関数・モジュールで作るか」を表す．
+テスト駆動開発(TDD)の進め方とテストリストの書き方は[tdd.md](tdd.md)で，設計書の書き方は[design.md](design.md)で説明する．
 
-各Iterationの演習用パッケージは，1つ前のIterationの解答例と同じコードから始まる．
+設計書は，[C4モデル](https://c4model.com/)の4つの階層(Context・Container・Component・Code)に分けたmermaidの図で書き，Iteration 0から8まで同じ設計書を育てる．
+
+各Iterationの演習用パッケージは，1つ前のIterationの解答例と同じコードと設計書から始まる．
 前のIterationを自分で書き終えていなくても，次のIterationに進める．
 
 ## テストの分け方
@@ -64,6 +68,7 @@ $ kakeibo summary
 - **要求**：コマンドライン引数に支出の金額を並べると，その合計を表示する．
 - **使い方**：`kakeibo 1200 350 800`で`合計: 2350円`と表示する．引数がなければ`合計: 0円`．
 - **モジュール**：`Kakeibo.Money`(`total`，`formatYen`)，`Kakeibo.App`(`run`)．
+- **設計書で更新するもの**：4つの階層を初めて書く．Contextは利用者とkakeibo，Containerは実行ファイル1つ，Componentは`Main`(`IO`)と純粋な2つのモジュール，Codeは型と関数の流れと`IO`の順序．mermaidでの図の書き方を学ぶ．
 - **学ぶこと**：関数の定義と呼び出し，型シグネチャ，`Int`・`String`・リスト，モジュール，GHCi，hspec，cabalのパッケージ構成．
 - **学習者が行うcabalの作業**：`cabal.project`への登録，`cabal build`・`cabal repl`・`cabal test`・`cabal run`，テストモジュールの`other-modules`への追記．
 
@@ -71,6 +76,7 @@ $ kakeibo summary
 
 - **要求**：金額を3桁ごとにカンマで区切る(`1,234,567円`)．引数がないときは`支出はありません`と表示する．
 - **リファクタリング**：`total`を，`sum`を使わずに再帰で書き直す．
+- **設計書で更新するもの**：Codeに，引数が空のときの流れと，`formatYen`の中の流れ(公開しない補助の関数を含む)を足す．
 - **学ぶこと**：パターンマッチ(リテラル・リスト)，再帰，ガード，`where`，`let`．
 - **既存のテストへの影響**：金額の表示を確かめるテストと，引数がないときの結合テストの期待値が変わる．
 
@@ -78,6 +84,7 @@ $ kakeibo summary
 
 - **要求**：支出を`費目:金額`の形で入力する(`kakeibo 食費:1200 交通費:350`)．1件ずつ明細を表示し，最後に合計を表示する．費目は食費・交通費・日用品・その他の4つで，それ以外の名前は「その他」として扱う．`:`がない引数は全体を金額とし，費目を「その他」とする．
 - **モジュール**：`Kakeibo.Entry`(`Category`，`Entry`，`parseCategory`，`categoryName`，`parseEntry`，`formatEntry`)を追加する．
+- **設計書で更新するもの**：Componentに`Kakeibo.Entry`を足し，Codeにデータ型の図(`Category`・`Entry`)を足す．
 - **学ぶこと**：`data`による直和型とレコード，`deriving (Show, Eq)`，`case`式，タプル，`break`．
 - **学習者が行うcabalの作業**：新しいモジュールを`exposed-modules`に追記する．
 
@@ -86,11 +93,13 @@ $ kakeibo summary
 - **要求**：明細と合計のあいだに，費目ごとの小計を表示する．小計が0円の費目は表示しない．
 - **モジュール**：`Kakeibo.Summary`(`summarize`)を追加する．
 - **リファクタリング**：`total`を`foldr`で書き直す．
+- **設計書で更新するもの**：Componentに`Kakeibo.Summary`を足し，Codeに集計の流れと`Enum`・`Bounded`のインスタンスを足す．
 - **学ぶこと**：高階関数(`map`・`filter`・`foldr`)，ラムダ式，関数合成`(.)`，`($)`，セクション，`Enum`・`Bounded`と`[minBound .. maxBound]`．
 
 ## Iteration 4：入力の誤りを知らせる
 
 - **要求**：金額が正の整数でない引数があれば，その引数と理由を示すエラーメッセージを標準エラー出力に表示し，終了コード1で終わる．
+- **設計書で更新するもの**：Codeの流れを`Either`で分かれる形にし，`IO`の順序にエラーのときの場合分けと終了コードを足す．
 - **学ぶこと**：部分関数と全域関数，`Maybe`，`Either`，`Text.Read.readMaybe`，`case`によるエラーの受け渡し．
 - **既存のテストへの影響**：`parseEntry`と`run`の型が`Either`を返すように変わるので，既存のテストも書き換える．
 
@@ -98,6 +107,7 @@ $ kakeibo summary
 
 - **要求**：費目ごとの小計を，金額の大きい順に表示する．同じ金額なら費目の定義順にする．
 - **リファクタリング**：金額を`newtype Yen`で表し，`Semigroup`・`Monoid`のインスタンスで足し算を表す．表示用の型クラス`Display`を定義し，`formatYen`・`categoryName`・`formatEntry`をそのインスタンスに置き換える．集計を`Data.Map.Strict`で書き直す．
+- **設計書で更新するもの**：Componentに`Kakeibo.Display`と外部のモジュール(`Data.Map.Strict`)を足し，Codeのデータ型の図に`newtype`・型クラス・インスタンスを描く．
 - **学ぶこと**：型クラスの定義とインスタンス，`newtype`，`Semigroup`・`Monoid`，`Ord`と並べ替え(`sortOn`・`Down`)，`Data.Map`，修飾付きimport．
 - **学習者が行うcabalの作業**：`build-depends`に`containers`を追加する．
 
@@ -105,6 +115,7 @@ $ kakeibo summary
 
 - **要求**：`kakeibo add 食費:1200 交通費:350`で支出をデータファイルに追記する．`kakeibo list`で明細と合計を，`kakeibo summary`で費目ごとの小計と合計を表示する．データファイルは環境変数`KAKEIBO_FILE`で指定し，未指定なら`kakeibo.tsv`を使う．ファイルがまだなければ，支出が0件として扱う．データファイルに読めない行があれば，その行番号を示すエラーにする．
 - **モジュール**：`Kakeibo.Command`(`Command`，`parseCommand`)，`Kakeibo.Report`(`listReport`，`summaryReport`)，`Kakeibo.Storage`(`encodeEntry`，`decodeEntry`，`decodeEntries`，`loadEntries`，`appendEntries`)を追加する．`Kakeibo.App.run`はデータファイルのパスを受け取る`IO`アクションになる．
+- **設計書で更新するもの**：4つの階層すべて．Containerにデータファイルを足し，Componentの`IO`の境界を広げ，Codeの流れと`IO`の順序をサブコマンドごとに描く．
 - **学ぶこと**：`IO`型，`do`記法，`<-`と`let`，`pure`，ファイルの読み書き，環境変数，純粋な関数と副作用のある処理の分離．
 - **学習者が行うcabalの作業**：`build-depends`に`directory`(ライブラリ)と`temporary`(結合テスト)を追加する．
 
@@ -113,10 +124,12 @@ $ kakeibo summary
 - **要求**：`kakeibo add 2026-09-01 食費:1200`のように日付を付けて記録する．`list`と`summary`は`kakeibo list 2026-09`のように月を指定すると，その月の支出だけを対象にする．
 - **モジュール**：`Kakeibo.Date`(`Date`，`YearMonth`，`parseDate`，`parseYearMonth`，`inMonth`)を追加する．`Entry`に日付のフィールドを足し，データファイルの各行の先頭にも日付を書く．
 - **リファクタリング**：`Maybe`・`Either`を返す関数どうしの組み合わせを，`case`の入れ子から`<$>`・`<*>`・`do`記法・`traverse`で書き直す．
+- **設計書で更新するもの**：Componentに`Kakeibo.Date`を足し，Codeに`Date`・`YearMonth`と，`<$>`・`<*>`・`do`記法・`traverse`で組み合わせる流れを描く．
 - **学ぶこと**：`Functor`・`Applicative`・`Monad`，`Either`と`Maybe`の`do`記法，`traverse`・`mapM_`．
 
 ## Iteration 8：プロパティベーステスト
 
 - **要求**：新しい機能は足さない．これまでに作った関数が満たすべき性質(保存した支出を読み戻すと元に戻る，小計の和が合計に等しい，など)を，ランダムに作った入力で確かめる．
+- **設計書で更新するもの**：Codeに「満たすべき性質」の節を足し，性質と，その前提(ジェネレータが作る値の範囲)を描く．
 - **学ぶこと**：QuickCheck，`Arbitrary`型クラスとジェネレータ，`prop`，性質の見つけ方．
 - **学習者が行うcabalの作業**：テストスイートの`build-depends`に`QuickCheck`を追加する．

@@ -13,7 +13,8 @@ Prefix every shell command with `rtk`, including each command in a `&&` chain �
 - 読者はHaskellを知らない前提で書く．新しい文法・概念は，初めて使うIterationの資料(`docs/haskell/iteration-N.md`)で説明してから使う．
 - 同じIterationのexerciseとsolutionは，同じコミットでそろえて変更する．
 - solutionのテストはすべて通す．exerciseは，学習者が書き足す前の状態でもビルドできるようにする．
-- Iteration N(N ≥ 1)のexerciseのコードとテストは，Iteration N-1のsolutionと同じにする．新しいモジュール，テスト，`.cabal`への追記は学習者の作業として残す．
+- Iteration N(N ≥ 1)のexerciseのコード・テスト・設計書(`design/`)は，Iteration N-1のsolutionと同じにする．新しいモジュール，テスト，`.cabal`への追記，設計書の更新は学習者の作業として残す．
+- 設計書は，C4モデルの4階層(`design/01-context.md`〜`04-code.md`)のmermaidの図で書く(`docs/design.md`)．Componentの図の矢印は実装の`import`と，Codeの図の名前は実装の名前と一致させる．
 - `cabal.project`の`packages`には，solutionのパッケージだけを列挙する(HLSはここに列挙したパッケージしか解析しない)．exerciseのパッケージは，学習者が各Iterationの最初に自分で追記する．
 - GHC・cabal・HLSの版は`mise.toml`の`[vars]`で決める．変えるときは，HLSがそのGHCに対応していることを確かめる．
 - `git commit`はlefthookのフックを実行する．失敗したら指摘を直す．`--no-verify`は使わない．
@@ -25,16 +26,18 @@ Prefix every shell command with `rtk`, including each command in a `&&` chain �
 ```
 iterations/iteration-N/
   exercise/    演習用パッケージ．学習者がここに実装とテストを書き足す．
-               docs/iteration-N.md(演習の手順)，TESTLIST.md(テストリストのひな形)を含む．
+               docs/iteration-N.md(演習の手順)，TESTLIST.md(テストリストのひな形)，design/(設計書)を含む．
   solution/    解答例パッケージ．exerciseを完成させた状態．
-               docs/iteration-N.md(各手順の解説)，TESTLIST.md(模範解答)を含む．
+               docs/iteration-N.md(各手順の解説)，TESTLIST.md・design/(模範解答)を含む．
 docs/
   ROADMAP.md   各Iterationの要求・モジュール・学ぶこと．Iterationの内容はここで決める．
   tdd.md       テスト駆動開発とテストリストの書き方．
+  design.md    設計書(C4モデル・mermaid)の書き方．
   cabal.md     cabalの使い方．
   haskell/     Iterationごとの，Haskellの文法・概念の資料．
 cabal.project  solutionのパッケージをまとめるcabalプロジェクト．
 .hlint.yaml    hlintの設定．
+tools/mermaid/ Markdownの中のmermaidの図の構文を検査するスクリプト(Node)．
 mise.toml      ツールの版とタスク(toolchain/install/fmt/lint/test/test-all/check/setup)．
 .devcontainer/ 開発用コンテナの定義．GHC・cabal・HLSはイメージのビルド時にghcupで入る．
 .claude/skills/build-iteration/  Iterationを作る手順のスキル．

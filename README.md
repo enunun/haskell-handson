@@ -25,21 +25,25 @@ $ kakeibo summary
 ```
 
 作りながら，関数と型，パターンマッチ，データ型，高階関数，`Maybe`・`Either`，型クラス，`IO`，`Functor`・`Applicative`・`Monad`，プロパティベーステストまでを一通り学ぶ．
+あわせて，テストリストと設計書を書いてから実装する進め方を身に付ける．
 
 ## 進め方
 
-どの機能も，テスト駆動開発(TDD)で作る．
+どの機能も，テスト駆動開発(TDD)で作り，設計と実装のループを回す．
 各Iterationの資料には仕様書がなく，「要求」と使い方の例だけが書いてある．
-要求を読んで単体テストと結合テストのテストリストを自分で書き，1項目ずつテストを書いて失敗させ(Red)，実装して通す(Green)．
+要求を読んで単体テストと結合テストのテストリストを自分で書き，それを実現する型・関数・モジュールを設計書に描いてから，1項目ずつテストを書いて失敗させ(Red)，実装して通す(Green)．
+設計書は，[C4モデル](https://c4model.com/)の4つの階層(Context・Container・Component・Code)に分けたmermaidの図で書き，Iterationを重ねながら同じ設計書を育てる．
 
 各Iterationは，次の順に進める．
 
 1. 演習用パッケージ(`iterations/iteration-N/exercise`)を，自分で`cabal.project`に登録する．
 2. 演習用パッケージの`docs/iteration-N.md`を読み，演習を順に進める．新しい文法は，[docs/haskell/](docs/haskell/)のそのIterationの資料で学ぶ．
-3. テストリストを`TESTLIST.md`に書き，TDDで実装する．cabalのコマンドや`.cabal`ファイルの編集も自分で行う．
-4. 詰まったとき，書き終えたときは，解答例パッケージ(`iterations/iteration-N/solution`)と，その`docs/iteration-N.md`(各手順の解説)を読む．
+3. テストリストを`TESTLIST.md`に書く．
+4. 設計書(`design/`)を更新する．書き方は[docs/design.md](docs/design.md)にまとめている．
+5. TDDで実装する．cabalのコマンドや`.cabal`ファイルの編集も自分で行う．実装したら，設計書と見比べてずれを直す．
+6. 詰まったとき，書き終えたときは，解答例パッケージ(`iterations/iteration-N/solution`)と，その`docs/iteration-N.md`(各手順の解説)を読む．
 
-各Iterationの演習用パッケージは，1つ前のIterationの解答例と同じコードから始まる．
+各Iterationの演習用パッケージは，1つ前のIterationの解答例と同じコードと設計書から始まる．
 前のIterationを書き終えていなくても，次のIterationに進める．
 
 | Iteration | 作る機能 | 学ぶ文法・概念 |
@@ -67,15 +71,19 @@ iterations/iteration-N/
   exercise/        演習用パッケージ．ここに実装とテストを書き足していく．
     docs/iteration-N.md  演習の手順
     TESTLIST.md          テストリスト(自分で書く)
+    design/              設計書(自分で書き，育てる)
   solution/        解答例パッケージ．詰まったときや，書き終えたあとの答え合わせに使う．
     docs/iteration-N.md  演習の各手順の解説
     TESTLIST.md          テストリストの模範解答
+    design/              設計書の模範解答
 docs/
   ROADMAP.md       各Iterationの目的と内容
   tdd.md           テスト駆動開発とテストリストの書き方
+  design.md        設計書の書き方(C4モデルとmermaid)
   cabal.md         cabalの使い方
   haskell/         Iterationごとの，Haskellの文法・概念の資料
 cabal.project      パッケージをまとめるcabalプロジェクト
+tools/mermaid/     設計書のmermaidの図の構文を検査する道具
 ```
 
 ## 開発環境
@@ -96,11 +104,13 @@ VSCodeの[Dev Containers](https://containers.dev/)で開発する．
 | ghcup | 0.2.6.2 | mise |
 | ormolu(フォーマッタ) | 0.8.1.1 | mise |
 | hlint(リンタ) | 3.10 | mise |
+| Node(mermaidの図の検査に使う) | 22 | mise |
 
 ghcup本体と補助ツールは[mise](https://mise.jdx.dev/)で入れ，GHC・cabal・HLSはそのghcupで入れる．
 版はすべて`mise.toml`で決めている(GHC・cabal・HLSは`[vars]`)．
 
 VSCodeには公式のHaskell拡張(`haskell.haskell`)が入り，型の表示・エラー表示・補完が使える．
+mermaidのプレビュー拡張(`bierner.markdown-mermaid`)も入り，Markdownのプレビューで設計書の図が描かれる．
 Haskellのファイルは保存時にormoluで整形される．
 コンテナのロケールは`C.UTF-8`で，ソースコード・コマンドライン引数・入出力の日本語をそのまま扱える．
 
@@ -114,7 +124,7 @@ cabalが取得したパッケージ一覧とビルド済みの依存パッケー
 ```sh
 mise run test      # cabal.projectに登録したパッケージのテストを実行する
 mise run fmt       # Haskellのコードを整形する
-mise run lint      # 整形の検査とhlintを実行する
+mise run lint      # 整形の検査，hlint，mermaidの図の構文の検査を実行する
 mise run test-all  # 演習用を含むすべてのパッケージのテストを実行する(教材の保守用)
 mise run check     # lintとtest-allをまとめて実行する(教材を直したときの確認用)
 ```
@@ -128,4 +138,4 @@ cabal repl <パッケージ名>   # パッケージを読み込んだ状態でGH
 cabal run <パッケージ名> -- <引数>…   # パッケージの実行ファイルを実行する
 ```
 
-コミット時には，[lefthook](https://lefthook.dev/)がステージしたHaskellのファイルにormoluとhlintをかける．
+コミット時には，[lefthook](https://lefthook.dev/)がステージしたHaskellのファイルにormoluとhlintを，Markdownのファイルにmermaidの図の検査をかける．
