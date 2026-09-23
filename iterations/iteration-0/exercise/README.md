@@ -11,7 +11,7 @@ $ cabal run kakeibo-iteration0 -- 1200 350 800
 合計: 2350円
 ```
 
-作りながら，Haskellの式・型・関数・モジュールと，cabalでのビルド・テスト，hspecでのテストの書き方を学ぶ．
+作りながら，Haskellの式・型・関数・モジュールと，cabalでのビルド・テスト，hspecでのテストの書き方，mermaidでの設計書の書き方を学ぶ．
 
 ## 進め方
 
@@ -31,6 +31,7 @@ src/Kakeibo/App.hs        引数から表示する行を作る(runを実装す�
 test/unit/                単体テスト(Specファイルを自分で作る)
 test/integration/         結合テスト(Specファイルを自分で作る)
 TESTLIST.md               テストリスト(自分で書く)
+design/                   設計書(C4モデルの4つの階層．自分で書く)
 docs/iteration-0.md       演習の手順
 ```
 
@@ -38,4 +39,5 @@ docs/iteration-0.md       演習の手順
 
 - [Iteration 0で使う文法・概念](../../../docs/haskell/iteration-0.md)
 - [テスト駆動開発とテストリスト](../../../docs/tdd.md)
+- [設計書の書き方](../../../docs/design.md)
 - [cabal](../../../docs/cabal.md)
