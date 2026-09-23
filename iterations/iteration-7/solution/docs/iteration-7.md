@@ -57,7 +57,24 @@ Left "not a number"
 - 月での絞り込みは，`inMonth`の単体テストで年と月の比べ方を，結合テストで「指定した月の支出だけが表示される」ことを確かめる．結合テストの支出には，前の月の末日(8月31日)と次の月の初日(10月1日)を入れ，境目の日付が含まれないことを確かめた．
 - `summarize`・`listReport`など，日付が結果に関係しないテストでは，テストのモジュールに補助の関数を作り，決まった日付の支出を作るようにした．
 
-## 演習7-4：テスト駆動で実装する
+## 演習7-4：設計書を更新する
+
+解答例の設計書は[../design/](../design/)にある．
+Iteration 6からの変更点は次のとおり．
+
+- Context・Container：説明に日付と月での絞り込みを足し，データファイルの行に日付が入ることを書いた．
+- Component：`Kakeibo.Date`を足した．`Kakeibo.Entry`(`Entry`が`Date`を持つ)，`Kakeibo.Command`(日付と年月を読む)，`Kakeibo.Storage`(データファイルの日付を読む)，`Kakeibo.App`(`inMonth`で絞り込む)から矢印を引いた．
+- Code：
+  - データ型の図に`Date`と`YearMonth`を足し，`Entry`の`date`のフィールドと，`Command`の`List`・`Summary`が持つ`Maybe YearMonth`を描いた．
+  - `add`の読み取りは，日付を読んでからその日付で支出を読むので，`d <- …`の`do`記法の流れとして描いた．
+  - `decodeEntry`は，日付・費目・金額を互いに関係なく読むので，`Entry <$> … <*> … <*> …`の1本の矢印として描いた．
+  - `list`・`summary`は，読み込んだ結果に`report . selectMonth target`を`<$>`で適用する流れにした．
+
+年月での絞り込み(`selectMonth`)は，サブコマンドを実行する`Kakeibo.App`に置いた．
+`Kakeibo.Date`には，1つの日付がその年月に含まれるか(`inMonth`)だけを置き，支出のリストを扱う処理は持たせていない．
+`Kakeibo.Date`は`Entry`を知らずに済むので，Componentの図で`Kakeibo.Date`から出る矢印は`Kakeibo.Display`への1本だけになる．
+
+## 演習7-5：テスト駆動で実装する
 
 ### 1. 書き直す(テストはすべて通ったまま)
 
@@ -337,14 +354,15 @@ main = do
     Right outputLines -> mapM_ putStrLn outputLines
 ```
 
-## 演習7-5：振り返る
+## 演習7-6：振り返る
 
 1. 日付の誤りを1つの項目にまとめた人もいるだろう．うるう年の規則は誤りやすいので，通る例と通らない例を両方置いておくと，条件の誤りに気付ける．
 2. `parseEntries`は7行から1行に，`decodeEntries`の中の再帰は7行から2行になった．書き直しの誤り(たとえば`traverse`に渡す関数の取り違え)は，Iteration 4とIteration 6で書いた`parseEntries`・`decodeEntries`のテストが見つける．
 3. `decodeEntry`の日付・費目・金額は，どれもほかの値を使わずに読めるので`<*>`で書いた．`parseCommand`の`add`は，読んだ日付を`parseEntries`に渡すので，前の結果を使える`do`記法で書いた．
 4. 結合テストでは，日付の誤りの代表として`add`の誤りを確かめる例は置かず，単体テスト(`parseCommand`の日付の誤り)に任せた．`run`は`parseCommand`の`Left`をそのまま返すことを，金額の誤りの結合テストで確かめているので，日付の誤りも同じ道を通ることがわかる．
+5. `splitOn`(`Kakeibo.Date`)と`splitTabs`(`Kakeibo.Storage`)は，実装のときに作った公開しない補助の関数である．同じ形の関数が2つあるので，共通のモジュールにまとめる設計も考えられる．
 
-## 演習7-6(発展)：期間を指定する
+## 演習7-7(発展)：期間を指定する
 
 `Command`の`List`と`Summary`が持つ値を，年月か期間かを表す型にする．
 
