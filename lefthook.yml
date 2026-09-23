@@ -1,0 +1,14 @@
+# コミット時に，ステージしたファイルを検査する．
+# CIは，同じ設定のツールをリポジトリ全体に対して実行する(mise run check)．
+pre-commit:
+  parallel: true
+  skip:
+    - merge
+    - rebase
+  commands:
+    format:
+      glob:
+        - '*'
+      run: echo 'TODO: run your formatter --check against {staged_files}'
+      fail_text: 整形が必要です．`mise run fmt`を実行してください．
+    # 必要に応じて，リント・型検査などのcommandsを追加する．
