@@ -38,6 +38,7 @@ src/Kakeibo/App.hs                   サブコマンドの実行(run)
 test/unit/Kakeibo/*Spec.hs           各モジュールの単体テスト
 test/integration/Kakeibo/AppSpec.hs  runの結合テスト(一時ディレクトリのデータファイルを使う)
 TESTLIST.md                          テストリストの模範解答
+design/                              設計書の模範解答(C4モデルの4つの階層)
 docs/iteration-6.md                  演習の各手順の解説
 ```
 
