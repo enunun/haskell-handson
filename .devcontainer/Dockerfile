@@ -46,4 +46,8 @@ ENV MISE_GLOBAL_CONFIG_FILE=/workspaces/mise.toml \
     MISE_GLOBAL_CONFIG_ROOT=/workspaces \
     MISE_TRUSTED_CONFIG_PATHS=/workspaces
 
+# rtkのhookを有効化する．
+RUN mkdir -p /root/.claude \
+	&& rtk init -g --hook-only
+
 WORKDIR /workspaces
